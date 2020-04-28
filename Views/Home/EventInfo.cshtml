@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Event Info Page";
+}
+@model Event
+
+<h1>Dojo Activity Center</h1>
+<a href="/dashboard">Home</a>
+<a href="/logout">Logout</a>
+<h2>@Model.Title</h2>
+@if(Model.Planner.UserId == ViewBag.User.UserId)
+{
+    <a href="/delete/@Model.EventId" class="btn btn-warning">Delete</a>
+}
+else
+{
+    if(Model.Participants.All(i => i.UserId != ViewBag.User.UserId))
+    {
+        <a href="/rsvp/@Model.EventId/@ViewBag.User.UserId" class="btn btn-primary">Join</a>
+    }
+    else
+    {
+        <a href="/rsvp/undo/@Model.EventId/@ViewBag.User.UserId" class="btn btn-warning">Leave</a>
+    }
+}
+<h3>Event Coordinator: @Model.Planner.Name</h3>
+<h3>Description: </h3>
+<p>@Model.Description</p>
+<h4>Participants:</h4>
+@foreach (var part in Model.Participants)
+{
+    <h4>    @part.User.Name</h4>
+}
